@@ -18,7 +18,20 @@ public final class EnumUtil {
                 .map(getter)
                 .collect(Collectors.toSet())
                 .size() == enumClass.getEnumConstants().length;
-        // ... boolean isUniqueOf(E item1, E item2, Function<E, T> getter) {}
-        // ... boolean isUniqueOf(E[] items, Function<E, T> getter) {}
     }
+
+    public static <E extends Enum<E>, T> boolean isUniqueOf(E item1, E item2, Function<E, T> getter) {
+        return java.util.Objects.equals(getter.apply(item1), getter.apply(item2));
+    }
+
+    public static <E extends Enum<E>, T> boolean isUniqueOf(E[] items, Function<E, T> getter) {
+        Set<T> set = new HashSet<>();
+        for (var item : items) {
+            set.add(getter.apply(item));
+        }
+
+        return items.length == set.size();
+    }
+
+
 }
